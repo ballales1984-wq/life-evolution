@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "Life Evolution - Programma di Sviluppo Personale",
+  description: "Programma evidence-informed di sviluppo personale integrato: cognizione, emozioni, fisico, creatività e impatto sociale.",
 };
 
 export default function RootLayout({
@@ -23,10 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="it">
+      <body className={`${outfit.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
