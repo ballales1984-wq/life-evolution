@@ -90,9 +90,10 @@ export default function Home() {
   const [animatedValues, setAnimatedValues] = useState(kpiMetrics.map(() => 0));
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<Message[]>([
-    { role: "assistant", content: "Ciao! Sono l'assistente del programma Life Evolution. Posso aiutarti a capire il programma, rispondere alle tue domande sullo sviluppo personale, o guidarti nella creazione del tuo piano. Cosa vuoi sapere?" }
+    { role: "assistant", content: "Ciao! Sono l'assistente AI di Life Evolution.\n\nPosso aiutarti con:\n- Spiegazioni sul programma\n- Creare i tuoi KPI SMART\n- Consigli su abitudini e mindfulness\n- Rispondere alle tue domande\n\nPer la chat AI è necessario che Ollama sia avviato localmente. In alternativa, usa Grok nella sezione Chat." }
   ]);
   const [chatLoading, setChatLoading] = useState(false);
+  const [chatModel, setChatModel] = useState<"grok" | "ollama">("grok");
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -138,8 +139,9 @@ export default function Home() {
     setChatMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setChatLoading(true);
 
+    const endpoint = chatModel === "grok" ? "/api/chat" : "/api/ollama";
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -399,7 +401,30 @@ export default function Home() {
           <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
               <h2 className="text-3xl font-semibold mb-2">Assistente AI</h2>
-              <p className="text-[#a3a3a3]">Chatta con Grok per esplorare il programma e ricevere guida personalizzata.</p>
+              <p className="text-[#a3a3a3] mb-4">Scegli il modello e chatta con l'AI per esplorare il programma.</p>
+              
+              <div className="flex gap-2 mb-4">
+                <button
+                  onClick={() => setChatModel("grok")}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    chatModel === "grok"
+                      ? "bg-[#10b981] text-[#0a0a0a]"
+                      : "bg-[#262626] text-[#a3a3a3] hover:text-[#fafafa]"
+                  }`}
+                >
+                  🤖 Grok (Online)
+                </button>
+                <button
+                  onClick={() => setChatModel("ollama")}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    chatModel === "ollama"
+                      ? "bg-[#10b981] text-[#0a0a0a]"
+                      : "bg-[#262626] text-[#a3a3a3] hover:text-[#fafafa]"
+                  }`}
+                >
+                  🖥️ Ollama (Locale)
+                </button>
+              </div>
             </div>
 
             <div className="bg-[#171717] border border-[#404040] rounded-xl overflow-hidden flex flex-col" style={{ height: "500px" }}>

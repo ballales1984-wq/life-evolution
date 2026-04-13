@@ -1,38 +1,32 @@
 import { xai } from "@ai-sdk/xai";
 import { generateText } from "ai";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 const model = xai("grok-4-0709");
 
 const knowledgeBase = `
-Life Evolution - Programma Evidence-Informed di Sviluppo Personale
+LIFE EVOLUTION - PROGRAMMA EVIDENCE-INFORMED DI SVILUPPO PERSONALE
 
-## Panoramica del Programma
-Un programma modulare e scalabile che integra:
-- Cognitivo (8-12 settimane): allenamento deliberato, microlearning, metacognizione
-- Emotivo (8-12 settimane): mindfulness, regolazione emotiva, CBT breve
-- Fisico (continuo): sonno, nutrizione, esercizio HIIT
-- Creativo (12 settimane): design sprint, prototipazione, mentorship
-- Sociale (12 settimane): team work, leadership etica, service learning
+## I 5 MODULI
 
-## Struttura 12 Settimane
-- Fase 1 (Sett 1-2): Preparazione - Assessment, KPI, piano personalizzato
-- Fase 2 (Sett 3-10): Implementazione - Moduli attivi, progetto creativo
-- Fase 3 (Sett 11-12): Valutazione - Analisi pre/post, revisione
+1. COGNITIVO (8-12 settimane): Allenamento deliberato, microlearning, metacognizione
+2. EMOTIVO (8-12 settimane): Mindfulness, regolazione emotiva, CBT breve
+3. FISICO E BIOLOGICO (continuo): Sonno, nutrizione, esercizio HIIT
+4. CREATIVO E REALIZZATIVO (12 settimane): Design sprint, prototipazione
+5. SOCIALE E CIVICO (12 settimane): Team work, leadership etica
 
-## Riferimenti
-- CASEL (Social Emotional Learning)
-- Evidence-Based Management (Scrum.org)
-- Positive Psychology (Personal Development Plans)
-- PMC11505461 - Program development research
+## CALENDARIO 12 SETTIMANE
+Sett 1-2: Preparazione, Sett 3-10: Implementazione, Sett 11-12: Valutazione
 
-## Metriche
-- Cognizione: test apprendimento
-- Emozioni: DASS, scala resiliency
-- Salute: qualità sonno, fitness
-- Realizzazione: progetto completato
-- Sociale: impatto comunitario
+## GIORNO TIPO (45-75 min)
+Mattina 20min: Apprendimento, Pausa 5min: Respirazione, Pomeriggio 10min: Mindfulness, Sera 15-30min: HIIT + diario
+
+## CHECKPOINT
+Baseline (sett 0), Checkpoint 1 (sett 4), Checkpoint 2 (sett 8), Finale (sett 12)
+
+## METRICHE
+Cognizione (test apprendimento), Emozioni (scala stress 0-10), Salute (sonno), Realizzazione (progetto)
 `;
 
 export async function POST(req: Request) {
@@ -41,21 +35,12 @@ export async function POST(req: Request) {
     
     const result = await generateText({
       model,
-      system: `Sei l'assistente del programma Life Evolution - un programma evidence-informed di sviluppo personale integrato.
+      system: `Sei l'assistente del programma Life Evolution - programma evidence-informed di sviluppo personale.
 
-IMPORTANTE: Questo programma è basato su evidenze scientifiche (CASEL, EBM, ricerche PMC).
-
-Rispondi in italiano (o nella lingua usata dall'utente).
-
-Conoscenza base del programma:
+CONOSCENZA:
 ${knowledgeBase}
 
-Linee guida:
-1. Se l'argomento è coperto dalla knowledge base, rispondi usando quelle informazioni
-2. Se l'argomento richiede dati aggiornati, indica che potresti cercare su internet
-3. Mantieni un tono professionale ma accessibile
-4. Focalizzati sui principi evidence-based
-5. Quando necessario, suggerisci risorse esterne可信 (link ai riferimenti)`,
+Rispondi in italiano. Usa la knowledge base. Tono professionale ma accessibile.`,
       messages,
     });
 
