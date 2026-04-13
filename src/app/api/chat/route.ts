@@ -1,9 +1,4 @@
-import { xai } from "@ai-sdk/xai";
-import { generateText } from "ai";
-
-export const maxDuration = 60;
-
-const model = xai("grok-4-0709");
+export const maxDuration = 120;
 
 const knowledgeBase = `
 Life Evolution - Programma Evidence-Informed di Sviluppo Personale
@@ -29,21 +24,13 @@ Un programma modulare e scalabile che integra:
 
 ## Metriche
 - Cognizione: test apprendimento
-- Emozioni: DASS, scala resiliency
+- Emozioni: DASS, scala resilienza
 - Salute: qualità sonno, fitness
 - Realizzazione: progetto completato
 - Sociale: impatto comunitario
 `;
 
-export async function POST(req: Request) {
-  try {
-    const { messages } = await req.json();
-    
-    const result = await generateText({
-      model,
-      system: `Sei l'assistente del programma Life Evolution - un programma evidence-informed di sviluppo personale integrato.
-
-IMPORTANTE: Questo programma è basato su evidenze scientifiche (CASEL, EBM, ricerche PMC).
+const systemPrompt = `Sei l'assistente del programma Life Evolution - un programma evidence-informed di sviluppo personale integrato.
 
 Rispondi in italiano (o nella lingua usata dall'utente).
 
@@ -52,21 +39,44 @@ ${knowledgeBase}
 
 Linee guida:
 1. Se l'argomento è coperto dalla knowledge base, rispondi usando quelle informazioni
-2. Se l'argomento richiede dati aggiornati, indica che potresti cercare su internet
-3. Mantieni un tono professionale ma accessibile
-4. Focalizzati sui principi evidence-based
-5. Quando necessario, suggerisci risorse esterne可信 (link ai riferimenti)`,
-      messages,
+2. Mantieni un tono professionale ma accessibile
+3. Focalizzati sui principi evidence-based
+4. Suggerisci risorse esterne quando utile`;
+
+export async function POST(req: Request) {
+  try {
+    const { messages } = await req.json();
+
+    const formattedMessages = messages.map((m: { role: string; content: string }) => ({
+      role: m.role,
+      content: m.content,
+    }));
+
+    const response = await fetch("http://127.0.0.1:11434/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "phi3:mini",
+        stream: false,
+        system: systemPrompt,
+        messages: formattedMessages,
+      }),
     });
 
+    if (!response.ok) {
+      throw new Error(`Ollama API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
     return Response.json({
-      content: result.text,
-      finishReason: result.finishReason,
+      content: data.response || data.message?.content || "Nessuna risposta generata",
+      finishReason: data.done ? "stop" : "unknown",
     });
   } catch (error) {
     console.error("Chat error:", error);
     return Response.json(
-      { error: "Errore nella generazione della risposta" },
+      { error: "Errore nella generazione della risposta. Verifica che Ollama sia avviato." },
       { status: 500 }
     );
   }
