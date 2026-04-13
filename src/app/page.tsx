@@ -90,7 +90,7 @@ export default function Home() {
   const [animatedValues, setAnimatedValues] = useState(kpiMetrics.map(() => 0));
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<Message[]>([
-    { role: "assistant", content: "Ciao! Sono l'assistente AI di Life Evolution.\n\nPosso aiutarti con:\n- Spiegazioni sul programma\n- Creare i tuoi KPI SMART\n- Consigli su abitudini e mindfulness\n- Rispondere alle tue domande\n\nPer la chat AI è necessario che Ollama sia avviato localmente. In alternativa, usa Grok nella sezione Chat." }
+    { role: "assistant", content: "Ciao! 👋\n\nSono l'assistente AI di Life Evolution.\n\n📚 Posso aiutarti con:\n- Spiegazioni sui 5 moduli\n- Creare i tuoi KPI SMART\n- Consigli su abitudini e mindfulness\n- Rispondere alle tue domande\n\n💬 Clicca 'Grok (Online)' per iniziare la chat!" }
   ]);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatModel, setChatModel] = useState<"grok" | "ollama">("grok");
