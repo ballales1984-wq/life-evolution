@@ -1,47 +1,27 @@
+import { readFileSync } from "fs";
+import { join } from "path";
+
 export const maxDuration = 120;
 
-const knowledgeBase = `
-Life Evolution - Programma Evidence-Informed di Sviluppo Personale
+const knowledgeBase = readFileSync(
+  join(process.cwd(), "knowledge.md"),
+  "utf-8"
+);
 
-## Panoramica del Programma
-Un programma modulare e scalabile che integra:
-- Cognitivo (8-12 settimane): allenamento deliberato, microlearning, metacognizione
-- Emotivo (8-12 settimane): mindfulness, regolazione emotiva, CBT breve
-- Fisico (continuo): sonno, nutrizione, esercizio HIIT
-- Creativo (12 settimane): design sprint, prototipazione, mentorship
-- Sociale (12 settimane): team work, leadership etica, service learning
-
-## Struttura 12 Settimane
-- Fase 1 (Sett 1-2): Preparazione - Assessment, KPI, piano personalizzato
-- Fase 2 (Sett 3-10): Implementazione - Moduli attivi, progetto creativo
-- Fase 3 (Sett 11-12): Valutazione - Analisi pre/post, revisione
-
-## Riferimenti
-- CASEL (Social Emotional Learning)
-- Evidence-Based Management (Scrum.org)
-- Positive Psychology (Personal Development Plans)
-- PMC11505461 - Program development research
-
-## Metriche
-- Cognizione: test apprendimento
-- Emozioni: DASS, scala resilienza
-- Salute: qualità sonno, fitness
-- Realizzazione: progetto completato
-- Sociale: impatto comunitario
-`;
-
-const systemPrompt = `Sei l'assistente del programma Life Evolution - un programma evidence-informed di sviluppo personale integrato.
+const systemPrompt = `Sei l'assistente del programma Life Evolution - un programma evidence-informed di sviluppo personale integrato della durata di 12 settimane.
 
 Rispondi in italiano (o nella lingua usata dall'utente).
 
-Conoscenza base del programma:
+Conoscenza completa del programma:
 ${knowledgeBase}
 
-Linee guida:
-1. Se l'argomento è coperto dalla knowledge base, rispondi usando quelle informazioni
+Linee guida per le risposte:
+1. Usa le informazioni dalla knowledge base per rispondere accuratamente
 2. Mantieni un tono professionale ma accessibile
 3. Focalizzati sui principi evidence-based
-4. Suggerisci risorse esterne quando utile`;
+4. Quando appropriato, suggerisci le risorse o riferimenti
+5. Incoraggia la costruzione di abitudini quotidiane
+6. Ricorda le metriche e i checkpoint del programma`;
 
 export async function POST(req: Request) {
   try {
@@ -76,7 +56,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Chat error:", error);
     return Response.json(
-      { error: "Errore nella generazione della risposta. Verifica che Ollama sia avviato." },
+      { error: "Errore nella generazione. Verifica che Ollama sia avviato con 'ollama serve'." },
       { status: 500 }
     );
   }
