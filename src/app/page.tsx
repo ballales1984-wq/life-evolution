@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const modules = [
   {
@@ -81,11 +81,19 @@ const resources = [
   { title: "Protocollo Esercizio HIIT", type: "PDF", size: "156 KB" },
 ];
 
+type Message = { role: "user" | "assistant"; content: string };
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState("panoramica");
   const [scores, setScores] = useState({ cognizione: 5, emotivo: 5, fisico: 5, motivazione: 5, sociale: 5 });
   const [totalScore, setTotalScore] = useState(0);
   const [animatedValues, setAnimatedValues] = useState(kpiMetrics.map(() => 0));
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<Message[]>([
+    { role: "assistant", content: "Ciao! Sono l'assistente del programma Life Evolution. Posso aiutarti a capire il programma, rispondere alle tue domande sullo sviluppo personale, o guidarti nella creazione del tuo piano. Cosa vuoi sapere?" }
+  ]);
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const total = Object.values(scores).reduce((a, b) => a + b, 0);
@@ -112,6 +120,7 @@ export default function Home() {
     { id: "panoramica", label: "Panoramica", icon: "📋" },
     { id: "moduli", label: "Moduli", icon: "🧩" },
     { id: "roadmap", label: "Roadmap", icon: "🗺️" },
+    { id: "chat", label: "AI Chat", icon: "💬" },
     { id: "valutazione", label: "Valutazione", icon: "📊" },
     { id: "risorse", label: "Risorse", icon: "📁" },
   ];
@@ -119,6 +128,41 @@ export default function Home() {
   const handleScoreChange = (dimension: string, value: number) => {
     setScores((prev) => ({ ...prev, [dimension]: value }));
   };
+
+  const handleChatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim() || chatLoading) return;
+
+    const userMessage = chatInput.trim();
+    setChatInput("");
+    setChatMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setChatLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [...chatMessages, { role: "user", content: userMessage }]
+        }),
+      });
+
+      const data = await response.json();
+      if (data.content) {
+        setChatMessages((prev) => [...prev, { role: "assistant", content: data.content }]);
+      } else {
+        setChatMessages((prev) => [...prev, { role: "assistant", content: "Scusa, si è verificato un errore. Riprova." }]);
+      }
+    } catch {
+      setChatMessages((prev) => [...prev, { role: "assistant", content: "Scusa, non riesco a connettermi in questo momento. Riprova." }]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-[#fafafa] font-['Outfit',sans-serif]">
@@ -346,6 +390,69 @@ export default function Home() {
                   </span>
                 </div>
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* Chat Tab */}
+        {activeTab === "chat" && (
+          <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div>
+              <h2 className="text-3xl font-semibold mb-2">Assistente AI</h2>
+              <p className="text-[#a3a3a3]">Chatta con Grok per esplorare il programma e ricevere guida personalizzata.</p>
+            </div>
+
+            <div className="bg-[#171717] border border-[#404040] rounded-xl overflow-hidden flex flex-col" style={{ height: "500px" }}>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {chatMessages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[80%] p-4 rounded-xl ${
+                        msg.role === "user"
+                          ? "bg-[#10b981] text-[#0a0a0a]"
+                          : "bg-[#262626] text-[#fafafa]"
+                      }`}
+                    >
+                      <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
+                    </div>
+                  </div>
+                ))}
+                {chatLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-[#262626] p-4 rounded-xl">
+                      <div className="flex gap-1">
+                        <span className="w-2 h-2 bg-[#10b981] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="w-2 h-2 bg-[#10b981] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="w-2 h-2 bg-[#10b981] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div ref={chatEndRef} />
+              </div>
+
+              <form onSubmit={handleChatSubmit} className="p-4 border-t border-[#404040]">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Scrivi un messaggio..."
+                    disabled={chatLoading}
+                    className="flex-1 bg-[#262626] border border-[#404040] rounded-xl px-4 py-3 text-[#fafafa] placeholder-[#737373] focus:outline-none focus:border-[#10b981]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={chatLoading || !chatInput.trim()}
+                    className="px-6 py-3 bg-[#10b981] text-[#0a0a0a] rounded-xl font-semibold hover:bg-[#34d399] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    →
+                  </button>
+                </div>
+              </form>
             </div>
           </section>
         )}

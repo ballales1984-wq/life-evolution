@@ -2,20 +2,17 @@
 
 ## Current State
 
-**Project Status**: ✅ Implementato e funzionante
+**Project Status**: ✅ Implementato con Grok AI
 
-Sviluppata l'applicazione web Life Evolution che presenta il programma evidence-informed di sviluppo personale integrato.
+Applicazione web Life Evolution con integrazione xAI Grok per chat interattiva.
 
 ## Recently Completed
 
-- [x] Creazione SPEC.md con requisiti dettagliati
-- [x] Implementazione Home page con 5 tab di navigazione
-- [x] Sezione Panoramica con principi operativi
-- [x] Sezione Moduli con 5 moduli interattivi
-- [x] Timeline 12 settimane con 4 fasi
-- [x] Strumenti valutazione con KPI cards e form assessment
-- [x] Sezione Risorse con riferimenti evidence-based
-- [x] Configurazione font Outfit in layout.tsx
+- [x] Installazione Vercel AI SDK (@ai-sdk/xai)
+- [x] Creazione API route /api/chat con Grok-4-0709
+- [x] Aggiunta Chat tab con UI interattiva
+- [x] Knowledge base integrata nel system prompt
+- [x] Configurazione API key in .env.local
 - [x] Build e typecheck superati
 
 ## Project Structure
@@ -26,25 +23,31 @@ Sviluppata l'applicazione web Life Evolution che presenta il programma evidence-
 | `src/app/page.tsx` | Home page principale | ✅ Implementato |
 | `src/app/layout.tsx` | Root layout con font Outfit | ✅ Configurato |
 | `src/app/globals.css` | Stili globali | ✅ Tailwind 4 |
+| `src/app/api/chat/route.ts` | API chat con Grok | ✅ Implementato |
+| `.env.local` | API key (ignorato da git) | ✅ Configurato |
 
 ## Features Implementate
 
-- **Navigazione tab**: 5 sezioni (Panoramica, Moduli, Roadmap, Valutazione, Risorse)
-- **Moduli interattivi**: 5 moduli con hover effects e status badge
+- **Navigazione tab**: 6 sezioni (incluso Chat AI)
+- **Chat AI**: Interfaccia conversazionale con Grok-4-0709
+- **Knowledge base**: Programma Life Evolution nel system prompt
+- **Moduli interattivi**: 5 moduli con hover effects
 - **Timeline 12 settimane**: Griglia con colori per fase
-- **KPI Cards**: 6 metriche con animazione numeri
-- **Assessment Form**: Slider auto-valutazione con calcolo punteggio
-- **Risorse**: Template download (mock) + riferimenti esterni
+- **KPI Cards**: 6 metriche con animazione
+- **Assessment Form**: Slider auto-valutazione
 
 ## Tech Stack
 
 - Next.js 16.1.3 (App Router)
 - TypeScript
 - Tailwind CSS 4
+- Vercel AI SDK + @ai-sdk/xai
 - Font: Outfit (Google Fonts)
+- xAI API (Grok-4-0709)
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
 | 2026-04-13 | Implementazione completa Life Evolution webapp |
+| 2026-04-13 | Integrazione Grok AI con chat interattiva |
