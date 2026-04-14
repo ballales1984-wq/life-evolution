@@ -240,7 +240,7 @@ function HomeContent() {
         <div className="md:hidden flex gap-2 overflow-x-auto mb-6 pb-2">
           {tabs.map((tab) => (<button key={tab.id} onClick={() => navigate(tab.id)} className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap ${activeTab === tab.id ? "bg-[#10b981]/20 text-[#10b981]" : "bg-[#171717] text-[#a3a3a3]"}`}>{tab.icon} {tab.label}</button>))}
         </div>
-        <TabContent activeTab={activeTab} />
+        <TabContent key={activeTab} activeTab={activeTab} />
       </div>
 
       <footer className="border-t border-[#404040] py-6 text-center text-sm text-[#a3a3a3]">
