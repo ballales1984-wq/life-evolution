@@ -198,24 +198,9 @@ function TabContent({ activeTab }: { activeTab: string }) {
 function HomeContent() {
   const [activeTab, setActiveTab] = useState("panoramica");
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setActiveTab(params.get("tab") || "panoramica");
-    
-    const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      setActiveTab(params.get("tab") || "panoramica");
-    };
-    
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
   const navigate = (id: string) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("tab", id);
-    window.history.pushState({}, "", url);
     setActiveTab(id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const tabs = [
