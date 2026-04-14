@@ -196,8 +196,27 @@ function TabContent({ activeTab }: { activeTab: string }) {
 }
 
 function HomeContent() {
-  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-  const activeTab = searchParams?.get("tab") || "panoramica";
+  const [activeTab, setActiveTab] = useState("panoramica");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setActiveTab(params.get("tab") || "panoramica");
+    
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setActiveTab(params.get("tab") || "panoramica");
+    };
+    
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const navigate = (id: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", id);
+    window.history.pushState({}, "", url);
+    setActiveTab(id);
+  };
 
   const tabs = [
     { id: "panoramica", label: "Panoramica", icon: "📋" },
@@ -207,13 +226,6 @@ function HomeContent() {
     { id: "valutazione", label: "Valutazione", icon: "📊" },
     { id: "risorse", label: "Risorse", icon: "📁" },
   ];
-
-  const navigate = (id: string) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("tab", id);
-    window.history.pushState({}, "", url);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  };
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-[#fafafa]">
