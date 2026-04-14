@@ -196,15 +196,28 @@ function TabContent({ activeTab }: { activeTab: string }) {
 }
 
 function HomeContent() {
-  const [activeTab, setActiveTab] = useState("panoramica");
-  const [, forceUpdate] = useState(0);
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.slice(1);
+      return hash || "panoramica";
+    }
+    return "panoramica";
+  });
 
   const navigate = (id: string) => {
-    console.log("Navigating to:", id, "current:", activeTab);
+    window.location.hash = id;
     setActiveTab(id);
-    forceUpdate(n => n + 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1) || "panoramica";
+      setActiveTab(hash);
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   const tabs = [
     { id: "panoramica", label: "Panoramica", icon: "📋" },
