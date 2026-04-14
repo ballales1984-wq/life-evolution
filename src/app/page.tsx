@@ -197,9 +197,12 @@ function TabContent({ activeTab }: { activeTab: string }) {
 
 function HomeContent() {
   const [activeTab, setActiveTab] = useState("panoramica");
+  const [, forceUpdate] = useState(0);
 
   const navigate = (id: string) => {
+    console.log("Navigating to:", id, "current:", activeTab);
     setActiveTab(id);
+    forceUpdate(n => n + 1);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
