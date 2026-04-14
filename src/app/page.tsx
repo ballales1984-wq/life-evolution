@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const modules = [
   { id: "cognitivo", icon: "🧠", title: "Cognitivo", duration: "8-12 settimane", description: "Allenamento deliberato, microlearning, metacognizione", objective: "Aumento performance su test di apprendimento", status: "attivo" },
@@ -240,7 +240,7 @@ function HomeContent() {
         <div className="md:hidden flex gap-2 overflow-x-auto mb-6 pb-2">
           {tabs.map((tab) => (<button key={tab.id} onClick={() => navigate(tab.id)} className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap ${activeTab === tab.id ? "bg-[#10b981]/20 text-[#10b981]" : "bg-[#171717] text-[#a3a3a3]"}`}>{tab.icon} {tab.label}</button>))}
         </div>
-        <TabContent key={activeTab} activeTab={activeTab} />
+        <TabContent activeTab={activeTab} />
       </div>
 
       <footer className="border-t border-[#404040] py-6 text-center text-sm text-[#a3a3a3]">
@@ -251,9 +251,5 @@ function HomeContent() {
 }
 
 export default function Home() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a] text-[#fafafa] flex items-center justify-center"><p className="text-[#a3a3a3]">Caricamento...</p></div>}>
-      <HomeContent />
-    </Suspense>
-  );
+  return <HomeContent />;
 }
