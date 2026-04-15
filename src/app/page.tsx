@@ -196,6 +196,7 @@ function TabContent({ activeTab }: { activeTab: string }) {
     const [expandedArt, setExpandedArt] = useState<number | null>(null);
     const [filter, setFilter] = useState<string | null>(null);
     const [liberimetro, setLiberimetro] = useState({ paga: "", costo: "", result: null as number | null });
+    const [testScore, setTestScore] = useState<number[]>([]);
     const articles = [
       {
         title: "Il Calcolo del Nulla: quanto costa davvero la tua libertà?",
@@ -363,6 +364,39 @@ Non lasciare che la comodità sia il prezzo della tua prigionia. Riprenditi la f
               <p className="text-[#10b981] font-semibold text-lg">Hai recuperato {liberimetro.result.toFixed(1)} ore di Vita Reale.</p>
               <p className="text-[#a3a3a3] text-sm mt-2">
                 {liberimetro.result < 1 ? "Un pomeriggio di studio o una nuotata in mare." : liberimetro.result < 10 ? "Abbastanza per studiare un'arte o leggere un libro." : liberimetro.result < 50 ? "Una settimana di pensieri liberi. Puoi imparare le basi di uno strumento." : "Hai evitato un sequestro di persona legalizzato. Stai riprendendo il controllo."}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="bg-[#262626] border border-[#6366f1]/30 rounded-xl p-6">
+          <h3 className="text-xl font-semibold mb-3 text-[#6366f1]">Test: Quanto sei profondo nel recinto?</h3>
+          <p className="text-[#a3a3a3] text-sm mb-4">Rispondi onestamente. Per ogni "Sì", aggiungi un pezzo di filo spinato al tuo recinto.</p>
+          <div className="space-y-3">
+            {[
+              { q: "Riusciresti a fare una corsa/camminata di 1h senza telefono o GPS?", m: "La tua salute è un dato di proprietà del pastore." },
+              { q: "Senza corrente per 24h, sapresti occupare il tempo senza sentirti perso?", m: "Il tuo benessere è un software gestito da terzi." },
+              { q: "Prima di acquisti sopra 100€, calcoli le ore di lavoro effettivo (Liberimetro)?", m: "Stai scambiando vita con materia senza accorgertene." },
+              { q: "Riesci a stare 15 minuti in silenzio senza controllare qualcosa?", m: "La tua mente è stata addestrata a non sopportare il π." },
+              { q: "Hai dedicato più tempo ad arte/studio/musica che a shopping/social?", m: "Stai alimentando la Macchina più di te stesso." },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <button onClick={() => setTestScore(testScore.includes(i) ? testScore.filter(s => s !== i) : [...testScore, i])} className={`w-6 h-6 rounded border flex-shrink-0 flex items-center justify-center ${testScore.includes(i) ? "bg-[#6366f1] border-[#6366f1]" : "border-[#404040]"}`}>
+                  {testScore.includes(i) && "✓"}
+                </button>
+                <div>
+                  <p className="text-sm">{item.q}</p>
+                  {testScore.includes(i) && <p className="text-xs text-[#f59e0b] mt-1">{item.m}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+          {testScore.length > 0 && (
+            <div className="mt-4 p-4 bg-[#171717] rounded-lg">
+              <p className="font-semibold text-[#6366f1]">
+                {testScore.length <= 1 ? "Pecora Controcorrente" : testScore.length <= 3 ? "Zona Grigia" : "Totalmente Recintato"}
+              </p>
+              <p className="text-xs text-[#a3a3a3] mt-1">
+                {testScore.length <= 1 ? "Il recinto c'è, ma tu sai dove sono i buchi. Continua a sottrarre materia e aggiungere spirito." : testScore.length <= 3 ? "Il comfort ti sta seducendo. Usa il Liberimetro e nuota in mare aperto." : "Il tuo π interiore è solo addormentato. Inizia a dire No a una piccola comodità oggi."}
               </p>
             </div>
           )}
