@@ -195,6 +195,7 @@ function TabContent({ activeTab }: { activeTab: string }) {
   if (activeTab === "recinto") {
     const [expandedArt, setExpandedArt] = useState<number | null>(null);
     const [filter, setFilter] = useState<string | null>(null);
+    const [liberimetro, setLiberimetro] = useState({ paga: "", costo: "", result: null as number | null });
     const articles = [
       {
         title: "Il Calcolo del Nulla: quanto costa davvero la tua libertà?",
@@ -312,6 +313,23 @@ Custodisci il tuo silenzio. È l'unica materia prima che non potranno mai compra
             Il sistema vorrebbe ridurci a un <span className="text-[#6366f1]">numero finito</span>, tracciabile, consumabile.
             Ma c'è uno spazio dove la macchina non può seguirti: l'arte, lo studio, il movimento libero.
           </p>
+        </div>
+        <div className="bg-[#262626] border border-[#10b981]/30 rounded-xl p-6">
+          <h3 className="text-xl font-semibold mb-3 text-[#10b981]">Il Liberimetro</h3>
+          <p className="text-[#a3a3a3] text-sm mb-4">Calcola quanto tempo della tua unica vita stai scambiando per un oggetto o servizio "del recinto".</p>
+          <div className="grid md:grid-cols-2 gap-4 mb-4">
+            <div><label className="block text-xs text-[#a3a3a3] mb-1">Paga oraria netta (€)</label><input type="number" value={liberimetro.paga} onChange={(e) => setLiberimetro({ ...liberimetro, paga: e.target.value })} placeholder="Es: 10" className="w-full bg-[#171717] border border-[#404040] rounded-lg px-3 py-2 text-[#fafafa]" /></div>
+            <div><label className="block text-xs text-[#a3a3a3] mb-1">Costo oggetto (€)</label><input type="number" value={liberimetro.costo} onChange={(e) => setLiberimetro({ ...liberimetro, costo: e.target.value })} placeholder="Es: 300" className="w-full bg-[#171717] border border-[#404040] rounded-lg px-3 py-2 text-[#fafafa]" /></div>
+          </div>
+          <button onClick={() => { const p = parseFloat(liberimetro.paga); const c = parseFloat(liberimetro.costo); if (p > 0 && c > 0) setLiberimetro({ ...liberimetro, result: c / p }); }} className="w-full py-2 bg-[#10b981] text-[#0a0a0a] rounded-lg font-medium">Calcola il Tempo Ritornato</button>
+          {liberimetro.result !== null && (
+            <div className="mt-4 p-4 bg-[#171717] rounded-lg border-l-4 border-[#10b981]">
+              <p className="text-[#10b981] font-semibold text-lg">Hai recuperato {liberimetro.result.toFixed(1)} ore di Vita Reale.</p>
+              <p className="text-[#a3a3a3] text-sm mt-2">
+                {liberimetro.result < 1 ? "Un pomeriggio di studio o una nuotata in mare." : liberimetro.result < 10 ? "Abbastanza per studiare un'arte o leggere un libro." : liberimetro.result < 50 ? "Una settimana di pensieri liberi. Puoi imparare le basi di uno strumento." : "Hai evitato un sequestro di persona legalizzato. Stai riprendendo il controllo."}
+              </p>
+            </div>
+          )}
         </div>
         <div className="flex gap-2 flex-wrap">
           {categories.map((c) => (
