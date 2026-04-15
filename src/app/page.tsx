@@ -194,10 +194,13 @@ function TabContent({ activeTab }: { activeTab: string }) {
 
   if (activeTab === "recinto") {
     const [expandedArt, setExpandedArt] = useState<number | null>(null);
+    const [filter, setFilter] = useState<string | null>(null);
     const articles = [
       {
         title: "Il Calcolo del Nulla: quanto costa davvero la tua libertà?",
         icon: "🧮",
+        category: "fisica",
+        task: "Oggi, dopo aver letto questo pezzo, lascia il telefono a casa e cammina per 20 minuti. Guarda il cielo, non lo schermo.",
         content: `C'è un errore di calcolo alla base della nostra vita moderna, un errore che la "macchina" ci nasconde con cura dietro luci colorate e promesse di performance. Ci hanno convinto che per essere liberi, per muoverci, per fare sport, dobbiamo prima passare alla cassa.
 Facciamo i conti, quelli veri.
 Oggi, se vuoi andare a correre "come si deve", il sistema ti suggerisce un kit: scarpe in carbonio da 300 euro, abbigliamento tecnico da 100, uno smartphone o un orologio GPS da 1000 per tracciare ogni battito, e magari un abbonamento mensile per la musica. Totale? Circa 1500 euro.
@@ -221,6 +224,8 @@ Il tuo tempo è l'unica vera materia prima che possiedi. Non svenderla per un re
       {
         title: "Geopolitica dei Recinti: perché il mondo si sta chiudendo?",
         icon: "🌍",
+        category: "geopolitica",
+        task: "Riduci del 50% i prodotti che acquisti questa settimana. Compra solo il necessario.",
         content: `Per trent'anni ci hanno raccontato la favola della globalizzazione: un mondo senza confini, dove le merci viaggiavano libere e noi con loro. Era un'illusione. Oggi quella maschera è caduta e la realtà è sotto gli occhi di tutti: stiamo tornando a dividerci in macro-aree.
 Ma non è un caso e non è un fallimento improvviso. È una strategia. Prima di gestire le pecore, devi costruire il recinto.
 
@@ -258,6 +263,8 @@ Il recinto è perfetto solo se tu accetti di essere una pecora prevedibile. Nel 
       {
         title: "L'Ultimo Confine: Quando il Recinto entrerà nella tua Mente",
         icon: "🧠",
+        category: "mentale",
+        task: "Domani, dedicati 30 minuti di silenzio. Senza telefono, senza cuffie, senza schermo.",
         content: `Negli ultimi tre secoli, la "macchina" ha recintato tutto: la terra, le materie prime, i movimenti fisici attraverso passaporti e portafogli. Ma rimaneva un'ultima zona d'ombra, un'isola di libertà dove il pastore non poteva entrare: il pensiero.
 Oggi, quel confine sta per cadere. Non è più fantascienza; è la prossima fase dell'infrastruttura tecnica globale.
 
@@ -284,14 +291,21 @@ La resistenza non è tecnologica, è spirituale e intellettuale.
 Il recinto sta cercando di entrare dentro di te. Ma finché avrai la consapevolezza che tu sei il motore che alimenta la macchina, avrai sempre il potere di staccare la spina. Non siamo noi ad appartenere alla tecnologia; è la tecnologia che non può esistere senza il nostro "parlare".
 Custodisci il tuo silenzio. È l'unica materia prima che non potranno mai comprare.`
       },
-      { title: "Il sistema ha paura del tuo silenzio", desc: "Perché ridurre il rumore significa ritrovare te stesso", icon: "🤫" },
-      { title: "Lo scambio iniquo", desc: "Perché lavorare due mesi per scarpe da corsa è una trappola", icon: "👟" },
-      { title: "Il mare non ha fili", desc: "Nuotare in mare come atto di resistenza gratuita", icon: "🌊" },
-      { title: "300 anni di dati contro un attimo di lucidità", desc: "L'algoritmo non può leggere il tuo silenzio", icon: "🧠" },
+      { title: "Il sistema ha paura del tuo silenzio", category: "mentale", icon: "🤫", desc: "Perché ridurre il rumore significa ritrovare te stesso", task: "Oggi, 10 minuti di silenzio totale." },
+      { title: "Lo scambio iniquo", category: "fisica", icon: "👟", desc: "Perché lavorare due mesi per scarpe da corsa è una trappola", task: "Questa settimana, prova un'attività fisica gratuita." },
+      { title: "Il mare non ha fili", category: "fisica", icon: "🌊", desc: "Nuotare in mare come atto di resistenza gratuita", task: "Vai al mare. Entra in acqua." },
+      { title: "300 anni di dati contro un attimo di lucidità", category: "geopolitica", icon: "🧠", desc: "L'algoritmo non può leggere il tuo silenzio", task: "Ignora un algoritmo oggi." },
+    ];
+    const filteredArticles = filter ? articles.filter((a) => (a as any).category === filter) : articles;
+    const categories = [
+      { id: null, label: "Tutti", icon: "📚" },
+      { id: "fisica", label: "Sottrazione Fisica", icon: "🏃" },
+      { id: "geopolitica", label: "Geopolitica", icon: "🌍" },
+      { id: "mentale", label: "Indipendenza Mentale", icon: "🧠" },
     ];
     return (
       <section className="space-y-8">
-        <div><h2 className="text-3xl font-semibold mb-2">Oltre il Recinto</h2><p className="text-[#a3a3a3]">Rubrica sul risveglio della consapevolezza.</p></div>
+        <div><h2 className="text-3xl font-semibold mb-2">Oltre il Recinto</h2><p className="text-[#a3a3a3] italic">"Non è un blog di risposte, ma uno spazio per smettere di alimentare le illusioni. Perché tu sei un π, non un numero finito."</p></div>
         <div className="bg-[#171717] border border-[#404040] rounded-xl p-6 mb-4">
           <p className="text-[#a3a3a3] leading-relaxed">
             L'essere umano è come <span className="text-[#10b981]">Pi greco</span>: un numero infinito, imprevedibile.
@@ -299,8 +313,13 @@ Custodisci il tuo silenzio. È l'unica materia prima che non potranno mai compra
             Ma c'è uno spazio dove la macchina non può seguirti: l'arte, lo studio, il movimento libero.
           </p>
         </div>
+        <div className="flex gap-2 flex-wrap">
+          {categories.map((c) => (
+            <button key={c.id as string} onClick={() => setFilter(c.id)} className={`px-3 py-1.5 rounded-lg text-xs ${filter === c.id ? "bg-[#10b981] text-[#0a0a0a]" : "bg-[#171717] text-[#a3a3a3]"}`}>{c.icon} {c.label}</button>
+          ))}
+        </div>
         <div className="space-y-4">
-          {articles.map((a, i) => (
+          {filteredArticles.map((a, i) => (
             <div key={i} className="bg-[#171717] border border-[#404040] rounded-xl overflow-hidden">
               <button onClick={() => setExpandedArt(expandedArt === i ? null : i)} className="w-full p-5 flex items-center gap-3 text-left hover:bg-[#262626]/50 transition-colors">
                 <span className="text-2xl">{a.icon}</span>
@@ -308,8 +327,15 @@ Custodisci il tuo silenzio. È l'unica materia prima che non potranno mai compra
                 <span className="text-[#10b981]">{expandedArt === i ? "▲" : "▼"}</span>
               </button>
               {expandedArt === i && (
-                <div className="px-5 pb-5 text-[#a3a3a3] whitespace-pre-line text-sm leading-relaxed">
-                  {(a as any).content || a.desc}
+                <div className="px-5 pb-5">
+                  <div className="text-[#a3a3a3] whitespace-pre-line text-sm leading-relaxed mb-4">
+                    {(a as any).content || a.desc}
+                  </div>
+                  {(a as any).task && (
+                    <div className="pt-4 border-t border-[#404040]">
+                      <p className="text-[#10b981] text-sm font-medium">Compito: {(a as any).task}</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
