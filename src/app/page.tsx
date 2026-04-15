@@ -193,33 +193,61 @@ function TabContent({ activeTab }: { activeTab: string }) {
   }
 
   if (activeTab === "recinto") {
+    const [expandedArt, setExpandedArt] = useState<number | null>(null);
     const articles = [
+      {
+        title: "Il Calcolo del Nulla: quanto costa davvero la tua libertà?",
+        icon: "🧮",
+        content: `C'è un errore di calcolo alla base della nostra vita moderna, un errore che la "macchina" ci nasconde con cura dietro luci colorate e promesse di performance. Ci hanno convinto che per essere liberi, per muoverci, per fare sport, dobbiamo prima passare alla cassa.
+Facciamo i conti, quelli veri.
+Oggi, se vuoi andare a correre "come si deve", il sistema ti suggerisce un kit: scarpe in carbonio da 300 euro, abbigliamento tecnico da 100, uno smartphone o un orologio GPS da 1000 per tracciare ogni battito, e magari un abbonamento mensile per la musica. Totale? Circa 1500 euro.
+Se calcoli la paga media di un lavoratore, scopri che stai scambiando due mesi della tua vita solo per avere il permesso di mettere un piede davanti all'altro. Stai regalando 300 ore di tempo reale in cambio di un'attrezzatura che ha già una data di scadenza.
+
+Il recinto dei "numeri finiti"
+In tre secoli di dati, la macchina ha imparato a recintarci perfettamente. Non servono più muri di pietra: bastano i debiti e i bisogni indotti. Quando accetti questo scambio, diventi quello che io chiamo un "numero finito". Sei prevedibile, tracciabile, incasellato in un foglio di calcolo. Il pastore sa esattamente dove sei e quanto ti resta da pagare.
+Ma l'essere umano ha una natura diversa. Noi siamo come il Pi greco (π): un numero infinito, che non si ripete mai, che sfugge a ogni definizione chiusa. La nostra forza è l'imprevedibilità, quella capacità di andare controcorrente che manda in tilt l'algoritmo.
+
+La strategia della sottrazione
+Come si esce dal recinto senza abbatterlo fisicamente? Con la sottrazione.
+La macchina ha bisogno che tu consumi materie prime, che compri oggetti, che alimenti il mercato. Se tu sottrai la materia e aggiungi l'intangibile, diventi invisibile al sistema.
+
+• Scegli il mare: Il mare è l'ultimo spazio libero. Non ha abbonamenti, non ha sensori. Nuotare è un atto di ribellione gratuita.
+• Scegli l'arte e lo studio: Invece di sei birre al bar, compra un libro o vai a un concerto. L'arte non consuma le materie prime per cui le macro-aree si fanno la guerra, ma produce consapevolezza.
+• Scegli il silenzio: Se smetti di alimentare la macchina con i tuoi dati e i tuoi acquisti inutili, la macchina smette di conoscerti.
+
+La vera resistenza oggi non è urlare, ma smettere di fare cose che portano a nulla. Quando smetti di scambiare il tuo tempo per il superfluo, quel tempo torna a essere tuo. E in quel tempo ritrovato, puoi finalmente ricominciare a pensare.
+Il tuo tempo è l'unica vera materia prima che possiedi. Non svenderla per un recinto di plastica.`
+      },
       { title: "Il sistema ha paura del tuo silenzio", desc: "Perché ridurre il rumore significa ritrovare te stesso", icon: "🤫" },
       { title: "Lo scambio iniquo", desc: "Perché lavorare due mesi per scarpe da corsa è una trappola", icon: "👟" },
       { title: "Il mare non ha fili", desc: "Nuotare in mare come atto di resistenza gratuita", icon: "🌊" },
       { title: "300 anni di dati contro un attimo di lucidità", desc: "L'algoritmo non può leggere il tuo silenzio", icon: "🧠" },
-      { title: "Arte, studio e movimento libero", desc: "Le attività che la macchina non può tassare", icon: "🎨" },
     ];
     return (
       <section className="space-y-8">
         <div><h2 className="text-3xl font-semibold mb-2">Oltre il Recinto</h2><p className="text-[#a3a3a3]">Rubrica sul risveglio della consapevolezza.</p></div>
-        <div className="bg-[#171717] border border-[#404040] rounded-xl p-6 mb-6">
+        <div className="bg-[#171717] border border-[#404040] rounded-xl p-6 mb-4">
           <p className="text-[#a3a3a3] leading-relaxed">
             L'essere umano è come <span className="text-[#10b981]">Pi greco</span>: un numero infinito, imprevedibile.
             Il sistema vorrebbe ridurci a un <span className="text-[#6366f1]">numero finito</span>, tracciabile, consumabile.
             Ma c'è uno spazio dove la macchina non può seguirti: l'arte, lo studio, il movimento libero.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-4">
           {articles.map((a, i) => (
-            <div key={i} className="bg-[#171717] border border-[#404040] rounded-xl p-5 hover:border-[#10b981]/50 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3 mb-2"><span className="text-2xl">{a.icon}</span><h3 className="text-lg font-semibold">{a.title}</h3></div>
-              <p className="text-[#a3a3a3] text-sm">{a.desc}</p>
+            <div key={i} className="bg-[#171717] border border-[#404040] rounded-xl overflow-hidden">
+              <button onClick={() => setExpandedArt(expandedArt === i ? null : i)} className="w-full p-5 flex items-center gap-3 text-left hover:bg-[#262626]/50 transition-colors">
+                <span className="text-2xl">{a.icon}</span>
+                <h3 className="text-lg font-semibold flex-1">{(a as any).title || a.title}</h3>
+                <span className="text-[#10b981]">{expandedArt === i ? "▲" : "▼"}</span>
+              </button>
+              {expandedArt === i && (
+                <div className="px-5 pb-5 text-[#a3a3a3] whitespace-pre-line text-sm leading-relaxed">
+                  {(a as any).content || a.desc}
+                </div>
+              )}
             </div>
           ))}
-        </div>
-        <div className="text-center pt-4">
-          <span className="text-[#a3a3a3] text-sm">Prossimamente: nuovi articoli ▼</span>
         </div>
       </section>
     );
