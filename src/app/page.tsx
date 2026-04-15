@@ -11,18 +11,18 @@ const modules = [
 ];
 
 const timeline = [
-  { week: 1, phase: "preparazione", title: "Assessment iniziale" },
-  { week: 2, phase: "preparazione", title: "Piano personalizzato" },
-  { week: 3, phase: "implementazione", title: "Fondamenti cognitivi" },
-  { week: 4, phase: "implementazione", title: "Fondamenti emotivi" },
-  { week: 5, phase: "implementazione", title: "Intensificazione pratica" },
-  { week: 6, phase: "implementazione", title: "Progetto creativo" },
-  { week: 7, phase: "implementazione", title: "Monitoraggio biologico" },
-  { week: 8, phase: "implementazione", title: "Iterazione progetto" },
-  { week: 9, phase: "implementazione", title: "Integrazione" },
-  { week: 10, phase: "implementazione", title: "Trasferimento reale" },
-  { week: 11, phase: "valutazione", title: "Valutazione intermedia" },
-  { week: 12, phase: "valutazione", title: "Chiusura pilota" },
+  { week: 1, phase: "preparazione", title: "Assessment iniziale", esercizi: "Compila il questionario di valutazione iniziale. Definisci i tuoi 3 obiettivi SMART principali.", riflessione: "Chi vuoi essere alla fine di 12 settimane?" },
+  { week: 2, phase: "preparazione", title: "Piano personalizzato", esercizi: "Crea il tuo piano settimanale. Identifica i tuoi 3 blocchi mentali principali.", riflessione: "Quali abitudini ti stanno trattenendo?" },
+  { week: 3, phase: "implementazione", title: "Fondamenti cognitivi", esercizi: "30 min di microlearning al giorno. Tecnica Feynman: spiega un concetto ad alta voce.", riflessione: "Come apprendi meglio?" },
+  { week: 4, phase: "implementazione", title: "Fondamenti emotivi", esercizi: "10 min di mindfulness mattutina. Diario serale: 3 emozioni del giorno.", riflessione: "Cosa trigger le tue emozioni?" },
+  { week: 5, phase: "implementazione", title: "Intensificazione pratica", esercizi: "HIIT 3 volte settimana. Camminata veloce 30 min. Ritmo circadiano.", riflessione: "Come reagisce il tuo corpo?" },
+  { week: 6, phase: "implementazione", title: "Progetto creativo", esercizi: "Design sprint: 4 ore su un progetto creativo. Prototipo minimale.", riflessione: "Cosa vuoi creare?" },
+  { week: 7, phase: "implementazione", title: "Monitoraggio biologico", esercizi: "Traccia sonno, nutrizione, esercizio. Analizza i pattern.", riflessione: "Cosa influenza il tuo riposo?" },
+  { week: 8, phase: "implementazione", title: "Iterazione progetto", esercizi: "Rivedi il progetto creativo. Applica i feedback ricevuti.", riflessione: "Come puoi migliorare?" },
+  { week: 9, phase: "implementazione", title: "Integrazione", esercizi: "Componi tutti i moduli. Testa in ситуаazione reale.", riflessione: "Cosa funziona davvero?" },
+  { week: 10, phase: "implementazione", title: "Trasferimento reale", esercizi: "Applicazione degli insegnamenti nella vita quotidiana per 7 giorni.", riflessione: "Cos'è cambiato in te?" },
+  { week: 11, phase: "valutazione", title: "Valutazione intermedia", esercizi: "Rivaluta con lo stesso questionario iniziale. Confronta i progressi.", riflessione: "Quanto sei distante dall'obiettivo?" },
+  { week: 12, phase: "valutazione", title: "Chiusura pilota", esercizi: "Compila il questionario finale. Definisci il prossimo ciclo.", riflessione: "Chi sei ora rispetto a 12 settimane fa?" },
 ];
 
 const kpiMetrics = [
@@ -43,11 +43,15 @@ const resources = [
 
 function TabContent({ activeTab }: { activeTab: string }) {
   const [scores, setScores] = useState({ cognizione: 5, emotivo: 5, fisico: 5, motivazione: 5, sociale: 5 });
+  const [questionario, setQuestionario] = useState<Record<string, number>>({
+    energia: 3, sonno: 3, umore: 3, focus: 3, ansia: 3, autostima: 3, relazioni: 3, produttivita: 3, creativita: 3, resilienza: 3
+  });
+  const [questionarioStep, setQuestionarioStep] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [animatedValues, setAnimatedValues] = useState(kpiMetrics.map(() => 0));
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<Array<{role: "user"|"assistant", content: string}>>([
-    { role: "assistant" as const, content: "Ciao! 👋\n\nSono l'assistente AI di Life Evolution.\n\n📚 Posso aiutarti con:\n- Spiegazioni sui 5 moduli\n- Creare i tuoi KPI SMART\n- Consigli su abitudini e mindfulness\n\n💬 Clicca 'Grok' per iniziare!" }
+    { role: "assistant" as const, content: "Ciao! 👋\n\nSono il tuo assistente nel programma **Life Evolution** - un percorso evidence-informed di 12 settimane.\n\n📋 Il programma include:\n- **Settimane 1-2**: Assessment e piano personalizzato\n- **Settimane 3-10**: Implementazione (cognitivo, emotivo, fisico, creativo)\n- **Settimane 11-12**: Valutazione e chiusura\n\n💬 Sono qui per aiutarti con:\n- Comprendere gli esercizi settimanali\n- Riflettere sulle tue esperienze\n- Mantenere la motivazione\n- Rispondere alle tue domande\n\nChiedimi di una settimana specifica o di un modulo!" }
   ]);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatModel, setChatModel] = useState<"grok" | "ollama">("grok");
@@ -91,12 +95,13 @@ function TabContent({ activeTab }: { activeTab: string }) {
     setChatInput("");
     setChatMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setChatLoading(true);
+    const programContext = "Life Evolution è un programma di 12 settimane: settimane 1-2 preparazione (assessment, piano), settimane 3-10 implementazione (cognitivo, emotivo, fisico, creativo), settimane 11-12 valutazione. Obiettivi: obiettivi SMART, cicli di sperimentazione, supporto sociale.";
     try {
       const endpoint = chatModel === "grok" ? "/api/chat" : "/api/ollama";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [...chatMessages, { role: "user", content: userMessage }] }),
+        body: JSON.stringify({ messages: [{ role: "system", content: programContext }, ...chatMessages, { role: "user", content: userMessage }] }),
       });
       const data = await response.json();
       if (data.content) {
@@ -147,9 +152,15 @@ function TabContent({ activeTab }: { activeTab: string }) {
         <div><h2 className="text-3xl font-semibold mb-2">Roadmap 12 Settimane</h2><p className="text-[#a3a3a3]">Il percorso pilota.</p></div>
         <div className="grid gap-4">
           {timeline.map((t) => (
-            <div key={t.week} className={`flex items-center gap-4 p-4 rounded-xl border ${t.phase === "preparazione" ? "bg-[#6366f1]/10 border-[#6366f1]/30" : t.phase === "implementazione" ? "bg-[#10b981]/10 border-[#10b981]/30" : "bg-[#f59e0b]/10 border-[#f59e0b]/30"}`}>
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${t.phase === "preparazione" ? "bg-[#6366f1] text-white" : t.phase === "implementazione" ? "bg-[#10b981] text-[#0a0a0a]" : "bg-[#f59e0b] text-[#0a0a0a]"}`}>{t.week}</div>
-              <div className="flex-1 font-medium">{t.title}</div>
+            <div key={t.week} className={`p-4 rounded-xl border ${t.phase === "preparazione" ? "bg-[#6366f1]/10 border-[#6366f1]/30" : t.phase === "implementazione" ? "bg-[#10b981]/10 border-[#10b981]/30" : "bg-[#f59e0b]/10 border-[#f59e0b]/30"}`}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${t.phase === "preparazione" ? "bg-[#6366f1] text-white" : t.phase === "implementazione" ? "bg-[#10b981] text-[#0a0a0a]" : "bg-[#f59e0b] text-[#0a0a0a]"}`}>{t.week}</div>
+                <div className="font-semibold">{t.title}</div>
+              </div>
+              <div className="text-sm text-[#a3a3a3] space-y-1">
+                <p><span className="text-[#10b981]">📋 Esercizi:</span> {(t as any).esercizi}</p>
+                <p><span className="text-[#6366f1]">💭 Riflessione:</span> {(t as any).riflessione}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -174,13 +185,55 @@ function TabContent({ activeTab }: { activeTab: string }) {
   }
 
   if (activeTab === "valutazione") {
+    const domande = [
+      { key: "energia", Q: "Livello di energia generale (1=esaurito, 5=pieno di energia)", desc: "Energia" },
+      { key: "sonno", Q: "Qualità del sonno notturno (1=insonni, 5=riposo eccellente)", desc: "Sonno" },
+      { key: "umore", Q: "Stato d'animo predominante (1=triste, 5=sereno)", desc: "Umore" },
+      { key: "focus", Q: "Capacità di concentrarti (1=distratto, 5=molto focalizzato)", desc: "Focus" },
+      { key: "ansia", Q: "Livello di ansia/preoccupazione (1=calmo, 5=molto ansioso)", desc: "Ansia" },
+      { key: "autostima", Q: "Fiducia in te stesso (1=bassa, 5=alta)", desc: "Autostima" },
+      { key: "relazioni", Q: "Qualità delle relazioni sociali (1=isolate, 5=connesse)", desc: "Relazioni" },
+      { key: "produttivita", Q: "Senso di produttività (1=bloccato, 5=fluido)", desc: "Produttività" },
+      { key: "creativita", Q: "Espressione creativa (1=bloccato, 5=molto creativo)", desc: "Creatività" },
+      { key: "resilienza", Q: "Capacità di affrontare le difficoltà (1=fragile, 5=resistente)", desc: "Resilienza" },
+    ];
+    const questionarioKeys = Object.keys(questionario);
+    const currentQ = domande[questionarioStep];
     return (
       <section className="space-y-8">
-        <div><h2 className="text-3xl font-semibold mb-2">Strumenti di Valutazione</h2><p className="text-[#a3a3a3]">Metriche.</p></div>
-        <div className="grid md:grid-cols-3 gap-4">
-          {kpiMetrics.map((k, i) => (<div key={i} className="bg-[#171717] border border-[#404040] rounded-xl p-5"><div className="flex items-center gap-2 mb-2"><span className="text-xl">{k.icon}</span><span>{k.label}</span></div><div className="text-3xl font-bold text-[#10b981]">{animatedValues[i]}<span className="text-sm text-[#a3a3a3]">/100</span></div></div>))}
+        <div><h2 className="text-3xl font-semibold mb-2">Valutazione Iniziale</h2><p className="text-[#a3a3a3]">Rispondi onestamente per misurare il tuo punto di partenza.</p></div>
+        <div className="bg-[#171717] border border-[#404040] rounded-xl p-6">
+          <p className="text-sm text-[#a3a3a3] mb-2">Domanda {questionarioStep + 1} di {domande.length}</p>
+          <h3 className="text-xl font-semibold mb-6">{currentQ.Q}</h3>
+          <div className="flex justify-between gap-2 mb-6">
+            {[1,2,3,4,5].map((v) => (
+              <button key={v} onClick={() => { const updated = {...questionario, [currentQ.key]: v}; setQuestionario(updated); if (questionarioStep < domande.length - 1) setQuestionarioStep(questionarioStep + 1); }} className={`w-12 h-12 rounded-lg font-bold ${questionario[currentQ.key as keyof typeof questionario] === v ? "bg-[#10b981] text-[#0a0a0a]" : "bg-[#262626] text-[#a3a3a3]"}`}>{v}</button>
+            ))}
+          </div>
+          <div className="flex justify-between text-xs text-[#a3a3a3]"><span>1</span><span>5</span></div>
+          <div className="mt-4 flex justify-between">
+            <button onClick={() => questionarioStep > 0 && setQuestionarioStep(questionarioStep - 1)} className="text-[#a3a3a3] text-sm">← Indietro</button>
+            <button onClick={() => { const media = Math.round(Object.values(questionario).reduce((a: number, b: number) => a + b, 0) / domande.length * 20); setTotalScore(media); }} className="text-[#10b981] text-sm">Calcola →</button>
+          </div>
         </div>
-        <div className="bg-[#171717] border border-[#404040] rounded-xl p-6"><h3 className="text-xl font-semibold mb-4">Auto-Valutazione</h3><div className="space-y-4">{Object.entries(scores).map(([k, v]) => (<div key={k} className="flex items-center gap-4"><span className="capitalize w-24">{k}</span><input type="range" min="1" max="5" value={v} onChange={(e) => handleScoreChange(k, parseInt(e.target.value))} className="flex-1 accent-[#10b981]" /><span className="text-[#10b981] w-8">{v}</span></div>))}</div><div className="mt-6 text-center"><span className="text-4xl font-bold text-[#10b981]">{totalScore}</span><span className="text-[#a3a3a3]">/100</span></div></div>
+        <div className="grid md:grid-cols-2 gap-4">
+          {domande.map((d) => (
+            <div key={d.key} className="bg-[#171717] border border-[#404040] rounded-xl p-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-[#a3a3a3]">{d.desc}</span>
+                <span className={`text-lg font-bold ${questionario[d.key as keyof typeof questionario] >= 3 ? "text-[#10b981]" : "text-[#f59e0b]"}`}>{questionario[d.key as keyof typeof questionario]}/5</span>
+              </div>
+              <div className="w-full bg-[#262626] h-1 rounded-full mt-2"><div className="bg-[#10b981] h-1 rounded-full" style={{ width: `${questionario[d.key as keyof typeof questionario] * 20}%` }} /></div>
+            </div>
+          ))}
+        </div>
+        <div className="bg-[#171717] border border-[#404040] rounded-xl p-6 text-center">
+          <p className="text-[#a3a3a3] mb-2">Punteggio Totale</p>
+          <p className="text-5xl font-bold text-[#10b981]">{totalScore}<span className="text-2xl">/100</span></p>
+          <p className="text-sm text-[#a3a3a3] mt-2">
+            {totalScore >= 80 ? "Eccellente punto di partenza!" : totalScore >= 60 ? "Buona base da cui costruire." : totalScore >= 40 ? "C'è spazio per migliorare. Il programma ti aiuterà." : "Questo programma può fare la differenza per te."}
+          </p>
+        </div>
       </section>
     );
   }
