@@ -192,6 +192,39 @@ function TabContent({ activeTab }: { activeTab: string }) {
     );
   }
 
+  if (activeTab === "recinto") {
+    const articles = [
+      { title: "Il sistema ha paura del tuo silenzio", desc: "Perché ridurre il rumore significa ritrovare te stesso", icon: "🤫" },
+      { title: "Lo scambio iniquo", desc: "Perché lavorare due mesi per scarpe da corsa è una trappola", icon: "👟" },
+      { title: "Il mare non ha fili", desc: "Nuotare in mare come atto di resistenza gratuita", icon: "🌊" },
+      { title: "300 anni di dati contro un attimo di lucidità", desc: "L'algoritmo non può leggere il tuo silenzio", icon: "🧠" },
+      { title: "Arte, studio e movimento libero", desc: "Le attività che la macchina non può tassare", icon: "🎨" },
+    ];
+    return (
+      <section className="space-y-8">
+        <div><h2 className="text-3xl font-semibold mb-2">Oltre il Recinto</h2><p className="text-[#a3a3a3]">Rubrica sul risveglio della consapevolezza.</p></div>
+        <div className="bg-[#171717] border border-[#404040] rounded-xl p-6 mb-6">
+          <p className="text-[#a3a3a3] leading-relaxed">
+            L'essere umano è come <span className="text-[#10b981]">Pi greco</span>: un numero infinito, imprevedibile.
+            Il sistema vorrebbe ridurci a un <span className="text-[#6366f1]">numero finito</span>, tracciabile, consumabile.
+            Ma c'è uno spazio dove la macchina non può seguirti: l'arte, lo studio, il movimento libero.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          {articles.map((a, i) => (
+            <div key={i} className="bg-[#171717] border border-[#404040] rounded-xl p-5 hover:border-[#10b981]/50 transition-colors cursor-pointer">
+              <div className="flex items-center gap-3 mb-2"><span className="text-2xl">{a.icon}</span><h3 className="text-lg font-semibold">{a.title}</h3></div>
+              <p className="text-[#a3a3a3] text-sm">{a.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="text-center pt-4">
+          <span className="text-[#a3a3a3] text-sm">Prossimamente: nuovi articoli ▼</span>
+        </div>
+      </section>
+    );
+  }
+
   return null;
 }
 
@@ -226,6 +259,7 @@ function HomeContent() {
     { id: "chat", label: "AI Chat", icon: "💬" },
     { id: "valutazione", label: "Valutazione", icon: "📊" },
     { id: "risorse", label: "Risorse", icon: "📁" },
+    { id: "recinto", label: "Oltre il Recinto", icon: "🚪" },
   ];
 
   return (
