@@ -51,6 +51,10 @@ function TabContent({ activeTab }: { activeTab: string }) {
   ]);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatModel, setChatModel] = useState<"grok" | "ollama">("grok");
+  const [recintoExpandedArt, setRecintoExpandedArt] = useState<number | null>(null);
+  const [recintoFilter, setRecintoFilter] = useState<string | null>(null);
+  const [recintoLiberimetro, setRecintoLiberimetro] = useState({ paga: "", costo: "", result: null as number | null });
+  const [recintoTestScore, setRecintoTestScore] = useState<number[]>([]);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -193,10 +197,6 @@ function TabContent({ activeTab }: { activeTab: string }) {
   }
 
   if (activeTab === "recinto") {
-    const [expandedArt, setExpandedArt] = useState<number | null>(null);
-    const [filter, setFilter] = useState<string | null>(null);
-    const [liberimetro, setLiberimetro] = useState({ paga: "", costo: "", result: null as number | null });
-    const [testScore, setTestScore] = useState<number[]>([]);
     const articles = [
       {
         title: "Il Calcolo del Nulla: quanto costa davvero la tua libertà?",
@@ -334,7 +334,7 @@ Non lasciare che la comodità sia il prezzo della tua prigionia. Riprenditi la f
       { title: "Il mare non ha fili", category: "fisica", icon: "🌊", desc: "Nuotare in mare come atto di resistenza gratuita", task: "Vai al mare. Entra in acqua." },
       { title: "300 anni di dati contro un attimo di lucidità", category: "geopolitica", icon: "🧠", desc: "L'algoritmo non può leggere il tuo silenzio", task: "Ignora un algoritmo oggi." },
     ];
-    const filteredArticles = filter ? articles.filter((a) => (a as any).category === filter) : articles;
+    const recintoFilteredArticles = recintoFilter ? articles.filter((a: any) => a.category === recintoFilter) : articles;
     const categories = [
       { id: null, label: "Tutti", icon: "📚" },
       { id: "fisica", label: "Sottrazione Fisica", icon: "🏃" },
@@ -355,15 +355,15 @@ Non lasciare che la comodità sia il prezzo della tua prigionia. Riprenditi la f
           <h3 className="text-xl font-semibold mb-3 text-[#10b981]">Il Liberimetro</h3>
           <p className="text-[#a3a3a3] text-sm mb-4">Calcola quanto tempo della tua unica vita stai scambiando per un oggetto o servizio "del recinto".</p>
           <div className="grid md:grid-cols-2 gap-4 mb-4">
-            <div><label className="block text-xs text-[#a3a3a3] mb-1">Paga oraria netta (€)</label><input type="number" value={liberimetro.paga} onChange={(e) => setLiberimetro({ ...liberimetro, paga: e.target.value })} placeholder="Es: 10" className="w-full bg-[#171717] border border-[#404040] rounded-lg px-3 py-2 text-[#fafafa]" /></div>
-            <div><label className="block text-xs text-[#a3a3a3] mb-1">Costo oggetto (€)</label><input type="number" value={liberimetro.costo} onChange={(e) => setLiberimetro({ ...liberimetro, costo: e.target.value })} placeholder="Es: 300" className="w-full bg-[#171717] border border-[#404040] rounded-lg px-3 py-2 text-[#fafafa]" /></div>
+            <div><label className="block text-xs text-[#a3a3a3] mb-1">Paga oraria netta (€)</label><input type="number" value={recintoLiberimetro.paga} onChange={(e) => setRecintoLiberimetro({ ...recintoLiberimetro, paga: e.target.value })} placeholder="Es: 10" className="w-full bg-[#171717] border border-[#404040] rounded-lg px-3 py-2 text-[#fafafa]" /></div>
+            <div><label className="block text-xs text-[#a3a3a3] mb-1">Costo oggetto (€)</label><input type="number" value={recintoLiberimetro.costo} onChange={(e) => setRecintoLiberimetro({ ...recintoLiberimetro, costo: e.target.value })} placeholder="Es: 300" className="w-full bg-[#171717] border border-[#404040] rounded-lg px-3 py-2 text-[#fafafa]" /></div>
           </div>
-          <button onClick={() => { const p = parseFloat(liberimetro.paga); const c = parseFloat(liberimetro.costo); if (p > 0 && c > 0) setLiberimetro({ ...liberimetro, result: c / p }); }} className="w-full py-2 bg-[#10b981] text-[#0a0a0a] rounded-lg font-medium">Calcola il Tempo Ritornato</button>
-          {liberimetro.result !== null && (
+          <button onClick={() => { const p = parseFloat(recintoLiberimetro.paga); const c = parseFloat(recintoLiberimetro.costo); if (p > 0 && c > 0) setRecintoLiberimetro({ ...recintoLiberimetro, result: c / p }); }} className="w-full py-2 bg-[#10b981] text-[#0a0a0a] rounded-lg font-medium">Calcola il Tempo Ritornato</button>
+          {recintoLiberimetro.result !== null && (
             <div className="mt-4 p-4 bg-[#171717] rounded-lg border-l-4 border-[#10b981]">
-              <p className="text-[#10b981] font-semibold text-lg">Hai recuperato {liberimetro.result.toFixed(1)} ore di Vita Reale.</p>
+              <p className="text-[#10b981] font-semibold text-lg">Hai recuperato {recintoLiberimetro.result.toFixed(1)} ore di Vita Reale.</p>
               <p className="text-[#a3a3a3] text-sm mt-2">
-                {liberimetro.result < 1 ? "Un pomeriggio di studio o una nuotata in mare." : liberimetro.result < 10 ? "Abbastanza per studiare un'arte o leggere un libro." : liberimetro.result < 50 ? "Una settimana di pensieri liberi. Puoi imparare le basi di uno strumento." : "Hai evitato un sequestro di persona legalizzato. Stai riprendendo il controllo."}
+                {recintoLiberimetro.result < 1 ? "Un pomeriggio di studio o una nuotata in mare." : recintoLiberimetro.result < 10 ? "Abbastanza per studiare un'arte o leggere un libro." : recintoLiberimetro.result < 50 ? "Una settimana di pensieri liberi. Puoi imparare le basi di uno strumento." : "Hai evitato un sequestro di persona legalizzato. Stai riprendendo il controllo."}
               </p>
             </div>
           )}
@@ -380,41 +380,41 @@ Non lasciare che la comodità sia il prezzo della tua prigionia. Riprenditi la f
               { q: "Hai dedicato più tempo ad arte/studio/musica che a shopping/social?", m: "Stai alimentando la Macchina più di te stesso." },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3">
-                <button onClick={() => setTestScore(testScore.includes(i) ? testScore.filter(s => s !== i) : [...testScore, i])} className={`w-6 h-6 rounded border flex-shrink-0 flex items-center justify-center ${testScore.includes(i) ? "bg-[#6366f1] border-[#6366f1]" : "border-[#404040]"}`}>
-                  {testScore.includes(i) && "✓"}
+                <button onClick={() => setRecintoTestScore(recintoTestScore.includes(i) ? recintoTestScore.filter(s => s !== i) : [...recintoTestScore, i])} className={`w-6 h-6 rounded border flex-shrink-0 flex items-center justify-center ${recintoTestScore.includes(i) ? "bg-[#6366f1] border-[#6366f1]" : "border-[#404040]"}`}>
+                  {recintoTestScore.includes(i) && "✓"}
                 </button>
                 <div>
                   <p className="text-sm">{item.q}</p>
-                  {testScore.includes(i) && <p className="text-xs text-[#f59e0b] mt-1">{item.m}</p>}
+                  {recintoTestScore.includes(i) && <p className="text-xs text-[#f59e0b] mt-1">{item.m}</p>}
                 </div>
               </div>
             ))}
           </div>
-          {testScore.length > 0 && (
+          {recintoTestScore.length > 0 && (
             <div className="mt-4 p-4 bg-[#171717] rounded-lg">
               <p className="font-semibold text-[#6366f1]">
-                {testScore.length <= 1 ? "Pecora Controcorrente" : testScore.length <= 3 ? "Zona Grigia" : "Totalmente Recintato"}
+                {recintoTestScore.length <= 1 ? "Pecora Controcorrente" : recintoTestScore.length <= 3 ? "Zona Grigia" : "Totalmente Recintato"}
               </p>
               <p className="text-xs text-[#a3a3a3] mt-1">
-                {testScore.length <= 1 ? "Il recinto c'è, ma tu sai dove sono i buchi. Continua a sottrarre materia e aggiungere spirito." : testScore.length <= 3 ? "Il comfort ti sta seducendo. Usa il Liberimetro e nuota in mare aperto." : "Il tuo π interiore è solo addormentato. Inizia a dire No a una piccola comodità oggi."}
+                {recintoTestScore.length <= 1 ? "Il recinto c'è, ma tu sai dove sono i buchi. Continua a sottrarre materia e aggiungere spirito." : recintoTestScore.length <= 3 ? "Il comfort ti sta seducendo. Usa il Liberimetro e nuota in mare aperto." : "Il tuo π interiore è solo addormentato. Inizia a dire No a una piccola comodità oggi."}
               </p>
             </div>
           )}
         </div>
         <div className="flex gap-2 flex-wrap">
           {categories.map((c) => (
-            <button key={c.id as string} onClick={() => setFilter(c.id)} className={`px-3 py-1.5 rounded-lg text-xs ${filter === c.id ? "bg-[#10b981] text-[#0a0a0a]" : "bg-[#171717] text-[#a3a3a3]"}`}>{c.icon} {c.label}</button>
+            <button key={c.id as string} onClick={() => setRecintoFilter(c.id)} className={`px-3 py-1.5 rounded-lg text-xs ${recintoFilter === c.id ? "bg-[#10b981] text-[#0a0a0a]" : "bg-[#171717] text-[#a3a3a3]"}`}>{c.icon} {c.label}</button>
           ))}
         </div>
         <div className="space-y-4">
-          {filteredArticles.map((a, i) => (
+          {recintoFilteredArticles.map((a, i) => (
             <div key={i} className="bg-[#171717] border border-[#404040] rounded-xl overflow-hidden">
-              <button onClick={() => setExpandedArt(expandedArt === i ? null : i)} className="w-full p-5 flex items-center gap-3 text-left hover:bg-[#262626]/50 transition-colors">
+              <button onClick={() => setRecintoExpandedArt(recintoExpandedArt === i ? null : i)} className="w-full p-5 flex items-center gap-3 text-left hover:bg-[#262626]/50 transition-colors">
                 <span className="text-2xl">{a.icon}</span>
                 <h3 className="text-lg font-semibold flex-1">{(a as any).title || a.title}</h3>
-                <span className="text-[#10b981]">{expandedArt === i ? "▲" : "▼"}</span>
+                <span className="text-[#10b981]">{recintoExpandedArt === i ? "▲" : "▼"}</span>
               </button>
-              {expandedArt === i && (
+              {recintoExpandedArt === i && (
                 <div className="px-5 pb-5">
                   <div className="text-[#a3a3a3] whitespace-pre-line text-sm leading-relaxed mb-4">
                     {(a as any).content || a.desc}
