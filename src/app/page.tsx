@@ -218,6 +218,43 @@ La macchina ha bisogno che tu consumi materie prime, che compri oggetti, che ali
 La vera resistenza oggi non è urlare, ma smettere di fare cose che portano a nulla. Quando smetti di scambiare il tuo tempo per il superfluo, quel tempo torna a essere tuo. E in quel tempo ritrovato, puoi finalmente ricominciare a pensare.
 Il tuo tempo è l'unica vera materia prima che possiedi. Non svenderla per un recinto di plastica.`
       },
+      {
+        title: "Geopolitica dei Recinti: perché il mondo si sta chiudendo?",
+        icon: "🌍",
+        content: `Per trent'anni ci hanno raccontato la favola della globalizzazione: un mondo senza confini, dove le merci viaggiavano libere e noi con loro. Era un'illusione. Oggi quella maschera è caduta e la realtà è sotto gli occhi di tutti: stiamo tornando a dividerci in macro-aree.
+Ma non è un caso e non è un fallimento improvviso. È una strategia. Prima di gestire le pecore, devi costruire il recinto.
+
+La fine della "libertà" a basso costo
+La globalizzazione è fallita perché la promessa era falsa. Non serviva a renderci tutti "amici", ma a trovare il prezzo più basso sfruttando materie prime e schiavitù altrove. Ora che le risorse scarseggiano e i prezzi esplodono, il sistema ha cambiato marcia.
+Siamo passati dall'efficienza alla sicurezza. Ma sicurezza, per chi comanda, significa controllo.
+
+Macro-aree: dividere per governare
+Il mondo si sta spaccando in blocchi: l'Occidente, il blocco Cina-Russia, il Sud globale. Sono recinti costruiti su basi precise:
+
+• Lingua e cultura: Barriere naturali che impediscono la comunicazione tra i "controllati".
+• Tecnologia: Ogni macro-area vuole il suo sistema GPS, i suoi microchip, la sua IA.
+• Materie prime: La lotta per il litio, il cobalto e l'energia serve a decidere chi ha il permesso di muoversi e chi deve restare fermo.
+
+Se controlli l'energia e i metalli, controlli il recinto. Se alzi il prezzo delle materie prime, crei povertà. E la povertà è il recinto più invisibile e feroce che esista: non ti serve una guardia alla porta se non hai i soldi per il biglietto.
+
+La sorveglianza di massa: due facce, stessa medaglia
+In Cina la sorveglianza è esplicita, con il credito sociale e le telecamere. In Occidente "non si dice", ma c'è. È mascherata da comodità, da app, da passaporti biometrici e identità digitali.
+Due facce della stessa medaglia:
+1. Da una parte, l'ordine imposto con la forza.
+2. Dall'altra, l'ordine imposto con la burocrazia e il consumo.
+
+Il risultato è lo stesso: il 99% della popolazione è tracciato, misurato e incasellato. Il sistema sa cosa compri, dove vai e, grazie all'IA, sta imparando a prevedere cosa penserai.
+
+La via d'uscita è nel "non classificabile"
+Come abbiamo detto, noi siamo come il Pi greco (π). La macchina può recintare la terra, può dividere i blocchi, può tassare il carburante, ma non può ancora imprigionare il pensiero lucido.
+I flussi migratori ci sono sempre stati e sempre ci saranno: sono la prova che la vita spinge contro i confini. Ma la vera migrazione oggi è quella interna: uscire dal recinto mentale della macro-area.
+
+• Smetti di identificarti con i consumi che ti impongono.
+• Studia le dinamiche della terra e delle popolazioni.
+• Riconosci che il "nemico" non è nell'altra macro-area, ma è il pastore che vuole che tu rimanga un numero finito.
+
+Il recinto è perfetto solo se tu accetti di essere una pecora prevedibile. Nel momento in cui scegli l'intangibile e il movimento libero, la geografia dei blocchi smette di essere la tua prigione.`
+      },
       { title: "Il sistema ha paura del tuo silenzio", desc: "Perché ridurre il rumore significa ritrovare te stesso", icon: "🤫" },
       { title: "Lo scambio iniquo", desc: "Perché lavorare due mesi per scarpe da corsa è una trappola", icon: "👟" },
       { title: "Il mare non ha fili", desc: "Nuotare in mare come atto di resistenza gratuita", icon: "🌊" },
