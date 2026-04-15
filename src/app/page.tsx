@@ -41,7 +41,7 @@ const resources = [
   { title: "Protocollo Esercizio HIIT", type: "PDF", size: "156 KB" },
 ];
 
-function TabContent({ activeTab }: { activeTab: string }) {
+function TabContent({ activeTab, navigate }: { activeTab: string; navigate?: (id: string) => void }) {
   const [scores, setScores] = useState({ cognizione: 5, emotivo: 5, fisico: 5, motivazione: 5, sociale: 5 });
   const [questionario, setQuestionario] = useState<Record<string, number>>({
     energia: 3, sonno: 3, umore: 3, focus: 3, ansia: 3, autostima: 3, relazioni: 3, produttivita: 3, creativita: 3, resilienza: 3
@@ -51,7 +51,7 @@ function TabContent({ activeTab }: { activeTab: string }) {
   const [animatedValues, setAnimatedValues] = useState(kpiMetrics.map(() => 0));
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<Array<{role: "user"|"assistant", content: string}>>([
-    { role: "assistant" as const, content: "Ciao! 👋\n\nSono il tuo assistente nel programma **Life Evolution** - un percorso evidence-informed di 12 settimane.\n\n📋 Il programma include:\n- **Settimane 1-2**: Assessment e piano personalizzato\n- **Settimane 3-10**: Implementazione (cognitivo, emotivo, fisico, creativo)\n- **Settimane 11-12**: Valutazione e chiusura\n\n💬 Sono qui per aiutarti con:\n- Comprendere gli esercizi settimanali\n- Riflettere sulle tue esperienze\n- Mantenere la motivazione\n- Rispondere alle tue domande\n\nChiedimi di una settimana specifica o di un modulo!" }
+    { role: "assistant" as const, content: "Ciao! 👋\n\nSono il tuo assistente nel programma **Life Evolution**.\n\n📋 Sezioni del programma:\n- Panoramica (home)\n- Moduli (i 5 moduli)\n- Roadmap (12 settimane)\n- AI Chat (qui)\n- Valutazione (questionario)\n- Risorse (materiali)\n- Oltre il Recinto (blog)\n\n🧭 PUOI NAVIGARE DIRETTAMENTE:\nScrivi \"vai a [sezione]\" per aprire una sezione!\nEs: \"vai a moduli\", \"vai a valutazione\", \"vai a roadmap\"\n\n💬 Sono qui per aiutarti con esercizi, riflessioni e rispondere alle tue domande." }
   ]);
   const [chatLoading, setChatLoading] = useState(false);
   const [chatModel, setChatModel] = useState<"grok" | "ollama">("grok");
@@ -92,6 +92,28 @@ function TabContent({ activeTab }: { activeTab: string }) {
     e.preventDefault();
     if (!chatInput.trim() || chatLoading) return;
     const userMessage = chatInput.trim();
+    
+    const navCommands: Record<string, string> = {
+      "panoramica": "panoramica", "home": "panoramica", "inizio": "panoramica",
+      "moduli": "moduli", "modulo": "moduli", "programma": "moduli",
+      "roadmap": "roadmap", "percorso": "roadmap", "timeline": "roadmap",
+      "chat": "chat", "ai": "chat", "assistenza": "chat", "aiuto": "chat",
+      "valutazione": "valutazione", "valuta": "valutazione", "assessment": "valutazione",
+      "risorse": "risorse", "risorsa": "risorse", "materiali": "risorse",
+      "recinto": "recinto", "oltre": "recinto", "blog": "recinto",
+    };
+    
+    const lowerMsg = userMessage.toLowerCase();
+    for (const [key, tabId] of Object.entries(navCommands)) {
+      if (lowerMsg.includes("vai a " + key) || lowerMsg.includes("apri " + key) || lowerMsg.includes("mostra " + key) || lowerMsg.includes("click " + key) || lowerMsg === key) {
+        if (navigate && activeTab !== tabId) {
+          navigate(tabId);
+          setChatMessages((prev) => [...prev, { role: "assistant", content: `✓ Ho aperto la sezione ${tabId}. Cosa vuoi fare ora?` }]);
+          return;
+        }
+      }
+    }
+    
     setChatInput("");
     setChatMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setChatLoading(true);
@@ -551,7 +573,7 @@ function HomeContent() {
         <div className="md:hidden flex gap-2 overflow-x-auto mb-6 pb-2">
           {tabs.map((tab) => (<button key={tab.id} onClick={() => navigate(tab.id)} className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap ${activeTab === tab.id ? "bg-[#10b981]/20 text-[#10b981]" : "bg-[#171717] text-[#a3a3a3]"}`}>{tab.icon} {tab.label}</button>))}
         </div>
-        <TabContent activeTab={activeTab} />
+        <TabContent activeTab={activeTab} navigate={navigate} />
       </div>
 
       <footer className="border-t border-[#404040] py-6 text-center text-sm text-[#a3a3a3]">
