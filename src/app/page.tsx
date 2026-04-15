@@ -292,6 +292,42 @@ La resistenza non è tecnologica, è spirituale e intellettuale.
 Il recinto sta cercando di entrare dentro di te. Ma finché avrai la consapevolezza che tu sei il motore che alimenta la macchina, avrai sempre il potere di staccare la spina. Non siamo noi ad appartenere alla tecnologia; è la tecnologia che non può esistere senza il nostro "parlare".
 Custodisci il tuo silenzio. È l'unica materia prima che non potranno mai comprare.`
       },
+      {
+        title: "La Trappola del Benessere: perché il comfort è la tua gabbia",
+        icon: "🛋️",
+        category: "fisica",
+        task: "Riprogramma 30 minuti di noia oggi. Spegni tutto e siediti senza fare nulla.",
+        content: `Abbiamo sempre pensato che il progresso servisse a liberarci dalla fatica. Ma dopo tre secoli di "macchina", ci ritroviamo in un paradosso: siamo la generazione più comoda della storia, eppure siamo la più controllata, ansiosa e dipendente.
+Il benessere moderno non è un premio; è una strategia di gestione delle pecore.
+
+Il recinto imbottito
+Il pastore sa che una pecora affamata scappa o ribalta il recinto. Una pecora che ha la pancia piena, il riscaldamento a palla e uno schermo che la intrattiene, invece, non guarderà mai oltre la staccionata.
+Il benessere che ci vendono è un anestetico:
+
+• La comodità del divano: Ti toglie la voglia di camminare fuori, dove il satellite ti vede ma non ti può vendere nulla.
+• La spesa a domicilio: Ti toglie il contatto con la terra e con le materie prime reali, rendendoti dipendente dalla logistica della macchina.
+• L'algoritmo dei desideri: Ti evita la fatica di scegliere, decidendo per te cosa guardare, cosa mangiare e cosa pensare.
+
+Ogni piccola comodità che accettiamo è un filo invisibile che si lega al nostro polso. Più il recinto è confortevole, più è difficile decidere di uscirne.
+
+Il prezzo del "facile"
+Tutto ciò che è "facile" oggi, lo paghi con la tua sovranità domani.
+Quando scegli il comfort digitale e materiale:
+1. Perdi la capacità di fare: Se non sai più muoverti senza GPS o cucinare senza un'app, sei un suddito tecnologico.
+2. Perdi il limite fisico: La macchina vuole che tu dimentichi il tuo corpo. Vuole che tu sia solo un occhio che guarda e un dito che clicca "compra".
+3. Accetti la sorveglianza: Il condizionatore intelligente, l'assistente vocale, l'auto connessa... sono tutte spie che abbiamo invitato noi nel nostro spazio privato in cambio di un po' di pigrizia.
+
+Rompere il guscio: la scelta della fatica "viva"
+Uscire dalla trappola del benessere non significa autopunirsi, ma riappropriarsi della propria vitalità.
+La strategia della sottrazione qui diventa fisica:
+
+• Scegli il freddo o il caldo reale: Esci, vai a nuotare in mare anche se l'acqua non è riscaldata, cammina sotto la pioggia. Senti il tuo corpo che reagisce senza filtri.
+• Scegli la fatica non misurata: Fai sport per il piacere di sentire i muscoli che bruciano, non per vedere un grafico sul telefono.
+• Scegli la noia: Spegni il bombardamento. Nel vuoto della noia nascono quegli attimi di lucidità dove il Pi greco (π) ricomincia a scorrere.
+
+Il sistema ha paura di chi sa stare a disagio, perché chi non ha bisogno di comfort costante non può essere ricattato. Chi sa nuotare controcorrente nell'acqua fredda ha già rotto il recinto più difficile: quello della propria pigrizia indotta.
+Non lasciare che la comodità sia il prezzo della tua prigionia. Riprenditi la fatica di essere libero.`
+      },
       { title: "Il sistema ha paura del tuo silenzio", category: "mentale", icon: "🤫", desc: "Perché ridurre il rumore significa ritrovare te stesso", task: "Oggi, 10 minuti di silenzio totale." },
       { title: "Lo scambio iniquo", category: "fisica", icon: "👟", desc: "Perché lavorare due mesi per scarpe da corsa è una trappola", task: "Questa settimana, prova un'attività fisica gratuita." },
       { title: "Il mare non ha fili", category: "fisica", icon: "🌊", desc: "Nuotare in mare come atto di resistenza gratuita", task: "Vai al mare. Entra in acqua." },
